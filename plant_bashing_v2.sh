@@ -1,6 +1,8 @@
+#!/bin/bash
 play_count=0
 asked_name=false
-
+default_names=( "Morpheus" "Analiea" "Izzy" )
+default_index=0
 while true; do
     play_count=$((play_count + 1))
     echo "Run $play_count!"
@@ -28,20 +30,29 @@ while true; do
     if [ "$play_count" -ge 2 ]; then
         echo "Do you want to change your plants name? (yes/no)"
         read answer
-        if [ "$answer" = yes ]; then
+        if [ "$answer" = "yes" ]; then
             echo "what is its new name? (type name)"
             read plant_name
-            echo "Your plant is now named $plant_name!"
+            if [ -z "$plant_name" ]; then
+                plant_name="${default_names[$default_index]}"
+                echo "You didn't enter a name so it is now named $plant_name!"
+                 default_index=$(( (default_index + 1) % ${#default_names[@]} ))
+            else
+               echo "Your plant is now named $plant_name."
+            fi
         else 
-            echo "Ok your plant is still named $plant_name"
+            echo "Ok your plant is still named $plant_name."
         fi
     else 
         echo "Hey $name lets name your plant, (type in the name)"
         read plant_name
         if [ -z "$plant_name" ]; then
-            plant_name=Morpheus 
+          plant_name="${default_names[$default_index]}"
+                echo "You didn't enter a name so it is now named $plant_name!"
+                 default_index=$(( (default_index + 1) % ${#default_names[@]} ))   
+        else
+           echo "Your plant is now named $plant_name."
         fi
-        echo "Your plants name is now $plant_name"
     fi
 
 
